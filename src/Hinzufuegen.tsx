@@ -1,4 +1,5 @@
-"use client"
+
+import { supabase } from "@/lib/supabase"
 import {useState} from "react"
 import {Button} from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,18 +20,34 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { SearchIcon } from "lucide-react"
+
+
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+
 type SearchResult = {
-  code: string
-  product_name: string
-  brands: string
-  nutrition_grades: string
-  
+  name: string
+  Kalorien: number
+  Protein: number
+  Eisen: number
+  fodmap_types: string[]
+  Einheit: string
+  GewichtProStueck: number | null
 }
 
 const columns: ColumnDef<SearchResult>[] = [
-  { accessorKey: "product_name", header: "Produktname" },
-  { accessorKey: "brands", header: "Marke" },
-  { accessorKey: "nutrition_grades", header: "Nutri-Score" },
+  { accessorKey: "name", header: "Produktname" },
+  { accessorKey: "Kalorien", header: "Kalorien (pro 100g)" },
+  { accessorKey: "Protein", header: "Protein (pro 100g)" },
+  { accessorKey: "Eisen", header: "Eisen (pro 100g)" },
+  { accessorKey: "fodmap_types", header: "FODMAPs" },
 ]
 
 
@@ -52,30 +69,51 @@ function Navbar() {
 })
 
 const handleSearch = async () => {
-    if (query.trim() === "") {
-        setData([])
-        return
-    }
+  if (query.trim() === "") {
+    setData([])
+    return
+  }
 
-    setIsLoading(true)
-    try {
-        const response = await fetch(
-            `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&json=1&page_size=20&fields=code,product_name,brands,nutrition_grades`
-        )
-        const result = await response.json()   // ← Antwort in JSON umwandeln
-        setData(result.products ?? [])          // ← Ergebnis speichern
-    } catch (err) {
-        console.error(err)
-    } finally {
-        setIsLoading(false)                     // ← Ladezustand zurücksetzen
+  setIsLoading(true)
+  try {
+    const { data: result, error } = await supabase
+      .from("Food Database")
+      .select("*")
+      .ilike("name", `%${query}%`)
+
+    if (error) {
+      console.error(error)
+      setData([])
+    } else {
+      setData(result ?? [])
     }
+  } catch (err) {
+    console.error(err)
+  } finally {
+    setIsLoading(false)
+  }
 }
-
     
 
 
     return (
-    <div className = "search-bar-container flex items-center gap-2 p-4 border border-gray-300 rounded-md">
+
+      <>
+
+      <Item>
+  <ItemMedia variant="icon">
+    <SearchIcon />
+  </ItemMedia>
+  <ItemContent>
+    <ItemTitle>Mahlzeiten Hinzufügen</ItemTitle>
+    <ItemDescription>Wähle Lebensmittel aus...</ItemDescription>
+  </ItemContent>
+  
+</Item>
+
+      <div className = "flex flex-col gap-2" >
+
+      <div className = "search-bar-container flex items-center gap-2 p-4 border border-gray-300 rounded-md">
         <Input
         type = "text"
         value = {query}
@@ -85,8 +123,9 @@ const handleSearch = async () => {
 
         <Button
         onClick = {handleSearch}
-        className = "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        className = "px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
             >Suchen</Button>
+        </div>
         
         <div className="overflow-hidden rounded-md border">
   <Table>
@@ -132,14 +171,23 @@ const handleSearch = async () => {
       )}
     </TableBody>
   </Table>
-</div>
+  </div>
+
 
 
       </div>
+
+      
+
+</>
     )
 
+  }
 
-}
+
+
+
+  
 
 export default Navbar
 
