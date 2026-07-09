@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase"
 import {useState} from "react"
 import {Button} from "@/components/ui/button"
+import { ModeToggle } from "@/components/mode-toggle"
 import { Input } from "@/components/ui/input"
 import type {ColumnDef} from "@tanstack/react-table"
 import {
@@ -25,7 +26,6 @@ import { SearchIcon } from "lucide-react"
 
 import {
   Item,
-  ItemActions,
   ItemContent,
   ItemDescription,
   ItemMedia,
@@ -100,7 +100,8 @@ const handleSearch = async () => {
 
       <>
 
-      <Item>
+      <div className = "flex items-center gap-2">
+        <Item>
   <ItemMedia variant="icon">
     <SearchIcon />
   </ItemMedia>
@@ -110,6 +111,11 @@ const handleSearch = async () => {
   </ItemContent>
   
 </Item>
+
+<ModeToggle />
+      </div>
+
+      
 
       <div className = "flex flex-col gap-2" >
 
