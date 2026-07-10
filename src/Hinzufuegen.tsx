@@ -1,4 +1,4 @@
-
+"use client"
 import { supabase } from "@/lib/supabase"
 import {useState} from "react"
 import {Button} from "@/components/ui/button"
@@ -32,6 +32,21 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 
+
+import * as React from "react"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+
+
 type SearchResult = {
   name: string
   Kalorien: number
@@ -59,6 +74,8 @@ function Navbar() {
     const [query, setQuery] = useState("")
     const [data, setData] = useState<SearchResult[]>([])
     const [isLoading, setIsLoading] = useState(false)
+    const [position, setPosition] = useState("")
+    const [open, setOpen] = useState(false)
     
     
 
@@ -115,6 +132,24 @@ const handleSearch = async () => {
 <ModeToggle />
       </div>
 
+      <DropdownMenu open = {open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger render={<Button variant="outline">Mahlzeit auswählen</Button>} />
+      <DropdownMenuContent className="w-32">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Mahlzeit</DropdownMenuLabel>
+          <DropdownMenuRadioGroup value={position} onValueChange={(value) => {
+            setPosition(value)
+            setOpen(false)
+          }}>
+            <DropdownMenuRadioItem value="fruehstueck">Frühstück</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="mittagessen">Mittagessen</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="abendessen">Abendessen</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="snack">Snack</DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+
       
 
       <div className = "flex flex-col gap-2" >
@@ -132,9 +167,16 @@ const handleSearch = async () => {
         className = "px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
             >Suchen</Button>
         </div>
+
+        
         
         <div className="overflow-hidden rounded-md border">
+          
+
+          
+  
   <Table>
+  
     <TableHeader>
       {table.getHeaderGroups().map((headerGroup) => (
         <TableRow key={headerGroup.id}>
