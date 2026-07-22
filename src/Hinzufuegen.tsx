@@ -3,8 +3,8 @@ import { supabase } from "@/lib/supabase"
 import {useState} from "react"
 import {Button} from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { Input } from "@/components/ui/input"
 import type {ColumnDef} from "@tanstack/react-table"
+import SearchBar from "@/components/molecules/SearchBar"
 import {
   
   flexRender,
@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/item"
 
 
-import * as React from "react"
+
 
 import {
   DropdownMenu,
@@ -71,7 +71,7 @@ const columns: ColumnDef<SearchResult>[] = [
 
 function Navbar() {
 
-    const [query, setQuery] = useState("")
+    
     const [data, setData] = useState<SearchResult[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [position, setPosition] = useState("")
@@ -85,7 +85,7 @@ function Navbar() {
   getCoreRowModel: getCoreRowModel(),
 })
 
-const handleSearch = async () => {
+const handleSearch = async (query: string) => {
   if (query.trim() === "") {
     setData([])
     return
@@ -154,20 +154,8 @@ const handleSearch = async () => {
 
       <div className = "flex flex-col gap-2" >
 
-      <div className = "search-bar-container flex items-center gap-2 p-4 border border-gray-300 rounded-md">
-        <Input
-        type = "text"
-        value = {query}
-        onChange = {(e) => setQuery(e.target.value)}
-        placeholder = "Suchen..."
-        />
-
-        <Button
-        onClick = {handleSearch}
-        className = "px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-            >Suchen</Button>
-        </div>
-
+          <SearchBar onSearch={handleSearch} />
+      
         
         
         <div className="overflow-hidden rounded-md border">
