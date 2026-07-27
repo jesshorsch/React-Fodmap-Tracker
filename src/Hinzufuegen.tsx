@@ -69,7 +69,7 @@ const columns: ColumnDef<SearchResult>[] = [
 
 
 
-function Navbar() {
+function Hinzufuegen() {
 
     
     const [data, setData] = useState<SearchResult[]>([])
@@ -225,5 +225,5 @@ const handleSearch = async (query: string) => {
 
   
 
-export default Navbar
+export default Hinzufuegen
 
