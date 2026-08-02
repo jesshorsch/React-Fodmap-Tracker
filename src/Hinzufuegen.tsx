@@ -57,6 +57,8 @@ type SearchResult = {
   GewichtProStueck: number | null
 }
 
+
+
 const columns: ColumnDef<SearchResult>[] = [
   { accessorKey: "name", header: "Produktname" },
   { accessorKey: "Kalorien", header: "Kalorien (pro 100g)" },
@@ -69,6 +71,8 @@ const columns: ColumnDef<SearchResult>[] = [
 
 
 
+
+
 function Hinzufuegen() {
 
     
@@ -76,6 +80,8 @@ function Hinzufuegen() {
     const [isLoading, setIsLoading] = useState(false)
     const [position, setPosition] = useState("")
     const [open, setOpen] = useState(false)
+    const [selected, setSelected] = useState <SearchResult | null> (null)
+    const [menge, setMenge] = useState<number>(100)
     
     
 
@@ -110,6 +116,30 @@ const handleSearch = async (query: string) => {
     setIsLoading(false)
   }
 }
+
+const handleAdd = async () => {
+  console.log("aufgerufen")
+  if (!selected ) return
+
+  const kalorien = (selected.Kalorien / 100 ) * menge
+  const protein = (selected.Protein / 100) * menge
+  const eisen = (selected.Eisen / 100) * menge
+
+  const {error} = await supabase
+.from("daily_log")
+.insert({
+  name: selected.name,
+  menge,
+  kalorien,
+  protein,
+  eisen,
+  mahlzeit: position, 
+  datum: new Date().toISOString().split("T")[0],
+
+})
+}
+
+
     
 
 
@@ -168,6 +198,7 @@ const handleSearch = async (query: string) => {
     <TableHeader>
       {table.getHeaderGroups().map((headerGroup) => (
         <TableRow key={headerGroup.id}>
+           
           {headerGroup.headers.map((header) => (
             <TableHead key={header.id}>
               {header.isPlaceholder
@@ -182,6 +213,7 @@ const handleSearch = async (query: string) => {
       ))}
     </TableHeader>
     <TableBody>
+    
       {isLoading ? (
         <TableRow>
           <TableCell colSpan={columns.length} className="h-24 text-center">
@@ -190,7 +222,12 @@ const handleSearch = async (query: string) => {
         </TableRow>
       ) : table.getRowModel().rows?.length ? (
         table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
+          <TableRow 
+          key={row.id}
+          className = "cursor-pointer hover:bg-white/10"
+          onClick = {() => setSelected(row.original)}  >
+           
+          
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -207,6 +244,18 @@ const handleSearch = async (query: string) => {
       )}
     </TableBody>
   </Table>
+
+  {selected ? (<div><span>{selected.name} </span>
+  <input
+  type = "number"
+  value = {menge}
+  onChange = {(e) => setMenge(Number(e.target.value))}
+  ></input>
+  <span>g</span>
+  <Button onClick={handleAdd}>Hinzufügen</Button></div>) : null}
+  
+  
+  
   </div>
 
 

@@ -21,6 +21,8 @@ function App() {
 
       <BrowserRouter>
       <NavBar/>
+
+      <div className = "w-full flex justify-center">
       <Routes>
       
         <Route path="/hinzufuegen" element={<Hinzufuegen/>} />
@@ -28,6 +30,8 @@ function App() {
         <Route path="woche" element={<Woche/>} />
         <Route path="einstellungen" element={<Einstellungen/>} />
       </Routes>
+      </div>
+      
       </BrowserRouter>
 
 
