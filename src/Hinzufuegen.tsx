@@ -91,6 +91,11 @@ function Hinzufuegen() {
   getCoreRowModel: getCoreRowModel(),
 })
 
+
+
+
+
+
 const handleSearch = async (query: string) => {
   if (query.trim() === "") {
     setData([])
@@ -137,7 +142,14 @@ const handleAdd = async () => {
   datum: new Date().toISOString().split("T")[0],
 
 })
+
+if (error) {
+  console.log("Error") 
+  return 
 }
+console.log("Erfolgreich hinzugefügt")
+}
+
 
 
     

@@ -9,6 +9,10 @@ import {
 import { ItemGroup } from "@/components/ui/item";
 import {supabase} from "@/lib/supabase"
 import { useState, useEffect } from "react";
+import { Progress,
+    ProgressLabel,
+  ProgressValue,
+ } from "@/components/ui/progress"
 
 type LogEntry = {
     kalorien: number
@@ -43,8 +47,10 @@ function Home() {
     const gesamtProtein = log.reduce((sum, item) => sum + item.protein, 0)
     const gesamtEisen = log.reduce((sum, item) => sum + item.eisen, 0)
 
+    
+
     return ( 
-        <div>
+        <div className = "flex flex-col gap-10">
         <ItemGroup className = "flex-row gap-20 border">
             <Item>
 
@@ -75,6 +81,26 @@ function Home() {
             </Item>
           
         </ItemGroup>
+
+        <div className = "flex flex-col gap-10 ">
+
+        <Progress value={33} className = "w-full max-w-sm gap-1">
+        <ProgressLabel>Kalorien</ProgressLabel>
+        <ProgressValue/>
+        </Progress>
+
+        <Progress value={50} className = "w-full max-w-sm gap-1">
+        <ProgressLabel>Protein</ProgressLabel>
+        <ProgressValue/>
+        </Progress>
+
+        <Progress value={50} className = "w-full max-w-sm gap-1">
+        <ProgressLabel>Protein</ProgressLabel>
+        <ProgressValue/>
+        </Progress>
+
+        </div>
+
         </div>
     )
 }
