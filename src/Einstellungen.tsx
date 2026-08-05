@@ -38,7 +38,9 @@ function Einstellungen () {
 
 
     useEffect(() => {
-        supabase.from("settings").select("*").single().then(({data}) => {
+        supabase.from("settings").select("*").single().then(({data, error}) => {
+          console.log("geladen:", data, "fehler:", error)
+          if (error || !data) return
             setZiele({
                 kalorien: data.kalorien_ziel,
                 protein: data.protein_ziel,
@@ -122,11 +124,26 @@ function Einstellungen () {
       </InputGroup>
       
     </div>
-        <Button onClick = {() => setZiele({
+        <Button onClick = {async () => {
+          const neueZiele = {
             kalorien: Number(input.kalorien),
             protein: Number(input.protein),
-            eisen: Number(input.eisen)
-        })} >
+            eisen: Number(input.eisen),
+          }
+
+          const {data, error} = await supabase.from("settings").update({
+          kalorien_ziel: neueZiele.kalorien,
+          protein_ziel: neueZiele.protein,
+          eisen_ziel: neueZiele.eisen,
+        }).eq("id", 1)
+
+        console.log("gespeichert:", data, "fehler:", error)
+
+        setZiele(neueZiele)
+            
+        }}>
+
+      
             Speichern
     </Button>
         

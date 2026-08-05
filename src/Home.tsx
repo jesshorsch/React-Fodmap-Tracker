@@ -13,6 +13,7 @@ import { Progress,
     ProgressLabel,
   ProgressValue,
  } from "@/components/ui/progress"
+ import Einstellungen from "./Einstellungen";
 
 type LogEntry = {
     kalorien: number
@@ -28,8 +29,10 @@ type LogEntry = {
 
 function Home() {
     const [log, setLog] = useState<LogEntry[]>([])
+    const [ziele, setZiele] = useState({kalorien: 0, protein: 0, eisen: 0})
 
     useEffect(() => {
+
         const fetchLog = async () => {
             const { data, error } = await supabase 
             .from("daily_log")
@@ -39,7 +42,20 @@ function Home() {
             if (!error) setLog(data ?? [])
 
         }
+
+        const fetchZiele = async () => {
+            const {data} = await supabase 
+            .from("settings")
+            .select("*")
+            .single()
+            if (data) setZiele({
+                kalorien: data.kalorien_ziel,
+                protein: data.protein_ziel,
+                eisen: data.eisen_ziel
+            })
+        }
         fetchLog()
+        fetchZiele()
 
     }, [])
 
@@ -84,7 +100,7 @@ function Home() {
 
         <div className = "flex flex-col gap-10 ">
 
-        <Progress value={33} className = "w-full max-w-sm gap-1">
+        <Progress value={(gesamtKalorien / ziele.kalorien) * 100} className = "w-full max-w-sm gap-1">
         <ProgressLabel>Kalorien</ProgressLabel>
         <ProgressValue/>
         </Progress>
