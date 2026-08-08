@@ -15,6 +15,8 @@ import { Progress,
  } from "@/components/ui/progress"
  import Einstellungen from "./Einstellungen";
 
+ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 type LogEntry = {
     kalorien: number
     protein: number
@@ -67,7 +69,20 @@ function Home() {
 
     return ( 
         <div className = "flex flex-col gap-10">
-        <ItemGroup className = "flex-row gap-20 border">
+
+        <div className = "flex items-center fixed top-0 right-10 gap-2">
+            <Avatar className = "">
+                <AvatarImage src="IMG_0883 2.heic" />
+                <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+
+            <h1 className = "text-xl font-bold">Hi {name}!</h1>
+
+        </div>
+
+            
+
+        <ItemGroup className = "flex-row gap-20 border justify-between">
             <Item>
 
             <ItemContent>
@@ -117,7 +132,13 @@ function Home() {
 
         </div>
 
+        
+
         </div>
+
+        
+
+
     )
 }
 
