@@ -16,6 +16,8 @@ import { Progress,
  import Einstellungen from "./Einstellungen";
 
  import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import FodmapOverview from "./components/organisms/FodmapOverview";
+ 
 
 type LogEntry = {
     kalorien: number
@@ -32,6 +34,7 @@ type LogEntry = {
 function Home() {
     const [log, setLog] = useState<LogEntry[]>([])
     const [ziele, setZiele] = useState({kalorien: 0, protein: 0, eisen: 0})
+    const [profile,setProfile] = useState({name: "", surname: ""})
 
     useEffect(() => {
 
@@ -56,27 +59,41 @@ function Home() {
                 eisen: data.eisen_ziel
             })
         }
+
+        const fetchProfile = async () => {
+            const {data} = await supabase
+            .from("settings")
+            .select("*")
+            .eq("id", 1)
+            .single()
+            if (data) setProfile({name: data.name, surname: data.surname})
+        }
         fetchLog()
         fetchZiele()
+        fetchProfile()
 
     }, [])
+
+    
 
     const gesamtKalorien = log.reduce((sum, item) => sum + item.kalorien, 0)
     const gesamtProtein = log.reduce((sum, item) => sum + item.protein, 0)
     const gesamtEisen = log.reduce((sum, item) => sum + item.eisen, 0)
 
+
+
     
 
     return ( 
-        <div className = "flex flex-col gap-10">
+        <div className = "flex flex-col gap-10 ">
 
-        <div className = "flex items-center fixed top-0 right-10 gap-2">
+        <div className = "flex items-center  right-10 gap-2 fixed top-5 right-20 border rounded-full px-20 py-1 bg-gray-400">
             <Avatar className = "">
                 <AvatarImage src="IMG_0883 2.heic" />
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
 
-            <h1 className = "text-xl font-bold">Hi {name}!</h1>
+            <p className = " font-normal">Hi {profile.name}!</p>
 
         </div>
 
@@ -131,6 +148,8 @@ function Home() {
         </Progress>
 
         </div>
+
+        <FodmapOverview></FodmapOverview>
 
         
 

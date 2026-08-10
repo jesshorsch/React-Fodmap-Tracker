@@ -19,6 +19,22 @@ import {
   ItemGroup
   } from "@/components/ui/item"
 
+  import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/ui/field"
+import { Input } from "@base-ui/react"
+
+
+
 
 function Einstellungen () {
 
@@ -33,6 +49,13 @@ function Einstellungen () {
         protein: "",
         eisen: "",
     })
+
+    const [profile, setProfile] = useState({
+      name: "",
+      surname: "",
+      
+    })
+
     
 
 
@@ -53,6 +76,12 @@ function Einstellungen () {
             })
         })
     }, [])
+
+    useEffect(() => {
+      supabase.from("settings").select("name, surname").eq("id", 1).single().then(({data}) => {
+        if (data) setProfile({name: data.name, surname: data.surname})
+      })
+    }, []) 
     
 
 
@@ -123,7 +152,27 @@ function Einstellungen () {
         </InputGroupAddon>
       </InputGroup>
       
-    </div>
+    
+
+      <FieldSet>
+  <FieldLegend>Profil</FieldLegend>
+  
+  <FieldGroup>
+    <Field>
+      <FieldLabel htmlFor="name">Vorname</FieldLabel>
+      <Input value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} />
+    </Field>
+
+    <Field>
+      <FieldLabel htmlFor="username">Nachname</FieldLabel>
+      <Input value={profile.surname} onChange={(e) => setProfile({...profile, surname: e.target.value})} />
+    </Field>
+    
+  </FieldGroup>
+
+</FieldSet>
+
+</div>
         <Button onClick = {async () => {
           const neueZiele = {
             kalorien: Number(input.kalorien),
@@ -135,7 +184,11 @@ function Einstellungen () {
           kalorien_ziel: neueZiele.kalorien,
           protein_ziel: neueZiele.protein,
           eisen_ziel: neueZiele.eisen,
+          name: profile.name,
+          surname: profile.surname
         }).eq("id", 1)
+
+        
 
         console.log("gespeichert:", data, "fehler:", error)
 
@@ -146,8 +199,19 @@ function Einstellungen () {
       
             Speichern
     </Button>
+    
+
+    <div>
+          
+    </div>
+
+    
+
+    
         
         </div>
+
+        
 
     
     )
