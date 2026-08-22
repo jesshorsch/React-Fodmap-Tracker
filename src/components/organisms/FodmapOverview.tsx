@@ -9,77 +9,25 @@ import {
 import { Button } from "@base-ui/react";
 import { Icon } from "lucide-react";
 
+
+
 function FodmapOverview() {
+
+  const categories = [
+  {name: "Fruktane", color: "bg-red-500"},
+  {name: "Fruktose", color: "bg-blue-500"},
+  {name: "Laktose", color: "bg-green-500"},
+  {name: "GOS", color: "bg-yellow-500"},
+  {name: "Mannit", color: "bg-violet-500"},
+  {name: "Sorbit", color: "bg-orange-500"},
+
+]
 
     return (
         <div className = "flex flex-row gap-5">
-    
-
-        <Item className = "border bg-red-500 px-2 w-fit">
-  <ItemMedia variant="icon">
-    <Icon iconNode={[]} />
-  </ItemMedia>
-  <ItemContent>
-    <ItemTitle>Fruktane</ItemTitle>
-    <ItemDescription>Description</ItemDescription>
-  </ItemContent>
-  
-</Item>
-
-<Item className = "border bg-blue-500 px-2 w-fit">
-  <ItemMedia variant="icon">
-    <Icon iconNode={[]} />
-  </ItemMedia>
-  <ItemContent>
-    <ItemTitle>Fruktose</ItemTitle>
-    <ItemDescription>Description</ItemDescription>
-  </ItemContent>
-  
-</Item>
-
-<Item className = "border bg-green-500 px-2 w-fit">
-  <ItemMedia variant="icon">
-    <Icon iconNode={[]} />
-  </ItemMedia>
-  <ItemContent>
-    <ItemTitle>Laktose</ItemTitle>
-    <ItemDescription>Description</ItemDescription>
-  </ItemContent>
-  
-</Item>
-
-<Item className = "border bg-yellow-500 px-2 w-fit">
-  <ItemMedia variant="icon">
-    <Icon iconNode={[]} />
-  </ItemMedia>
-  <ItemContent>
-    <ItemTitle>GOS</ItemTitle>
-    <ItemDescription>Description</ItemDescription>
-  </ItemContent>
-  
-</Item>
-
-<Item className = "border bg-violet-500 px-2 w-fit">
-  <ItemMedia variant="icon">
-    <Icon iconNode={[]} />
-  </ItemMedia>
-  <ItemContent>
-    <ItemTitle>Mannit</ItemTitle>
-    <ItemDescription>Description</ItemDescription>
-  </ItemContent>
-  
-</Item>
-
-<Item className = "border bg-orange-500 px-2 w-fit">
-  <ItemMedia variant="icon">
-    <Icon iconNode={[]} />
-  </ItemMedia>
-  <ItemContent>
-    <ItemTitle>Sorbit</ItemTitle>
-    <ItemDescription>Description</ItemDescription>
-  </ItemContent>
-  
-</Item>
+    {categories.map((cat) => {
+      return <Item className = {`border ${cat.color} px-2 w-fit`}>{cat.name}</Item>
+    })}
 
 </div>
 

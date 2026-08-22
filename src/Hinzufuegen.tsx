@@ -73,6 +73,8 @@ const columns: ColumnDef<SearchResult>[] = [
 
 
 
+
+
 function Hinzufuegen() {
 
     
