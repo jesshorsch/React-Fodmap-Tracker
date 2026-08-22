@@ -27,6 +27,7 @@ type LogEntry = {
     menge: number
     mahlzeit: string
     datum: string
+    fodmap_types: string[]
 }
 
 
@@ -149,7 +150,7 @@ function Home() {
 
         </div>
 
-        <FodmapOverview></FodmapOverview>
+        <FodmapOverview entries={log} />
 
         
 

@@ -138,7 +138,8 @@ const handleAdd = async () => {
   kalorien,
   protein,
   eisen,
-  mahlzeit: position, 
+  fodmap_types: selected.fodmap_types,
+  mahlzeit: position,
   datum: new Date().toISOString().split("T")[0],
 
 })
